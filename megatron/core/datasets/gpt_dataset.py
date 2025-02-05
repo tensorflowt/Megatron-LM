@@ -1,5 +1,40 @@
 # Copyright (c) 2023, NVIDIA CORPORATION. All rights reserved.
+"""
+func: 用于 GPT 模型训练的数据集类 GPTDataset,以及相关的配置类 GPTDatasetConfig 和辅助函数。
+exp:
+    # 创建一个 GPTDatasetConfig 配置对象，用于配置 GPT 数据集的构建和行为
+    config = GPTDatasetConfig(
+        random_seed=42,  # 设置随机种子，确保实验可复现
+        sequence_length=1024,  # 设置每个样本的序列长度
+        blend=(["dataset1", "dataset2"], [0.3, 0.7]),  # 设置数据集的混合比例,dataset1 占 30%,dataset2 占 70%
+        split="99,1,0",  # 设置数据集的分割比例，训练集占 99%，验证集占 1%，测试集占 0%
+        num_dataset_builder_threads=4,  # 设置数据集构建时使用的线程数
+        path_to_cache="/path/to/cache",  # 设置数据集索引的缓存路径
+        tokenizer=my_tokenizer,  # 设置分词器，用于 tokenize 数据
+        reset_position_ids=True,  # 设置是否在文档边界重置位置 ID
+        reset_attention_mask=True,  # 设置是否在文档边界重置注意力掩码
+        eod_mask_loss=True,  # 设置是否启用 EOD(End of Document)掩码损失
+    )
 
+    # 创建一个 GPTDataset 数据集对象
+    dataset = GPTDataset(
+        indexed_dataset=my_indexed_dataset,  # 传入底层的 IndexedDataset 对象
+        dataset_path="/path/to/dataset",  # 传入数据集的路径
+        indexed_indices=numpy.arange(1000),  # 传入数据集的索引范围，这里使用前 1000 个样本
+        num_samples=10000,  # 设置数据集的总样本数
+        index_split=Split.train,  # 设置数据集的分割类型，这里是训练集
+        config=config,  # 传入配置对象
+    )
+
+    # 获取数据集的第一个样本
+    sample = dataset[0]
+
+    # 打印样本的输入 tokens
+    print(sample["tokens"])  # 输出: tensor([...])，表示输入序列的 token ID
+
+    # 打印样本的标签 tokens
+    print(sample["labels"])  # 输出: tensor([...])，表示输出序列的 token ID
+"""
 import logging
 import os
 import time

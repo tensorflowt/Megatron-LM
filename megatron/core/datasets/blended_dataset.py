@@ -1,5 +1,7 @@
 # Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
-
+"""
+func: 用于处理多个MegatronDataset实例的类,需要从不同来源/处理方式的多个数据集抽取数据。
+"""
 import hashlib
 import json
 import logging

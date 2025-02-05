@@ -1,5 +1,18 @@
 # Copyright (c) 2023, NVIDIA CORPORATION. All rights reserved.
-
+"""
+func: 配置和管理 Megatron 数据集的分割和混合。
+exp:
+ config = BlendedMegatronDatasetConfig(
+    random_seed=42,
+    sequence_length=1024,
+    blend=(["dataset1", "dataset2"], [0.3, 0.7]),
+    split="99,1,0",
+    num_dataset_builder_threads=4,
+    path_to_cache="/path/to/cache",
+    tokenizer=my_tokenizer,
+)
+print(config.split_matrix)  # 输出: [(0, 0.99), (0.99, 1.0), None]
+"""
 import functools
 import logging
 import re

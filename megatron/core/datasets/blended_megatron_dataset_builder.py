@@ -1,5 +1,22 @@
 # Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
+"""
+func: 用于在分布式环境中高效地构建和管理数据集，支持多种数据集的分割、混合和并行构建。
+exp:
+    config = BlendedMegatronDatasetConfig(
+        blend=(["dataset1", "dataset2"], [0.3, 0.7]),
+        split=[(0.0, 0.8), (0.8, 1.0)],  # 80% 训练集,20% 验证集
+        sizes=[1000000, 200000],  # 训练集 100 万样本，验证集 20 万样本
+    )
 
+    builder = BlendedMegatronDatasetBuilder(
+        cls=MyMegatronDatasetClass,
+        sizes=[1000000, 200000],
+        is_built_on_rank=lambda: True,  # 在所有 rank 上构建
+        config=config,
+    )
+
+    datasets = builder.build()  # 返回训练集和验证集
+"""
 import logging
 import math
 from concurrent.futures import ThreadPoolExecutor

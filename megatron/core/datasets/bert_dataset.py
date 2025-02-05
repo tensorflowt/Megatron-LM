@@ -1,4 +1,8 @@
 # Copyright (c) 2024, NVIDIA CORPORATION. All rights reserved.
+"""
+data: 2025-01-26
+func: 用于处理基于 WordPiece 标记化的 BERT 数据集
+"""
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Union
